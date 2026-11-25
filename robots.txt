@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://upt-project.github.io/japan-trip-guide/sitemap.xml
