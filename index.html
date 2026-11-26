@@ -63,6 +63,13 @@
 <p class="small">Mid-market rate, fetched when you open this page and updated daily. Your card or ATM will use its own rate - the fees that actually matter are in <a href="cash-and-atms.html">Cash and ATMs in Japan</a>.</p>
 </section>
 
+<section class="mapsec" aria-label="Map of Japan showing the prefectures with guides">
+<h2>Guides on the map</h2>
+<p class="map-status" id="jp-status" aria-live="polite">Coloured prefectures have a one-day guide - tap one to open it. A new city is added every month.</p>
+<div id="jp-map"></div>
+<p class="small">Vermilion = guide available now. Gold = Fukuoka, publishing 7 January 2027.</p>
+</section>
+
 <h2>The one-day guides</h2>
 <div class="cards">
 <div class="card">
@@ -169,7 +176,7 @@
 </div>
 
 <footer class="site"><div class="wrap">
-Japan Trip Guide For Beginners - one-day city guides to Japan. Full guides live on <a href="https://japantripguideforbeginners.substack.com">Substack</a>. Prices and hours change; always check the official links in each guide before you travel.<br>Photos on this page: Niccol&ograve; Chiamori, Hoi Wai, arnaud audoin, Imani Williams, MacroLingo LLC, Kelvin Castelino, Gije Cho and Harry Shum, via Pexels.
+Japan Trip Guide For Beginners - one-day city guides to Japan. Full guides live on <a href="https://japantripguideforbeginners.substack.com">Substack</a>. Prices and hours change; always check the official links in each guide before you travel.<br>Photos on this page: Niccol&ograve; Chiamori, Hoi Wai, arnaud audoin, Imani Williams, MacroLingo LLC, Kelvin Castelino, Gije Cho and Harry Shum, via Pexels. Japan map: japan-map-js (MIT License).
 </div></footer>
 <script>
 (function(){
@@ -222,6 +229,42 @@ Japan Trip Guide For Beginners - one-day city guides to Japan. Full guides live 
         })
         .catch(function(){ renderRate('approximate rate - live rate unavailable'); });
     });
+})();
+</script>
+<script src="jpmap.min.js"></script>
+<script>
+(function(){
+  var el = document.getElementById('jp-map');
+  var status = document.getElementById('jp-status');
+  if (!el || !status || typeof jpmap === 'undefined') { return; }
+  var DEFAULT_TEXT = status.textContent;
+  var LINKS = {13: 'tokyo.html', 26: 'kyoto.html', 27: 'osaka.html', 34: 'hiroshima.html'};
+  var w = Math.min(el.clientWidth || 720, 720);
+  new jpmap.japanMap(el, {
+    width: w,
+    lang: 'en',
+    movesIslands: true,
+    color: '#ddd5c2',
+    borderLineColor: '#ffffff',
+    areas: [
+      {code: 13, color: '#b03a2e'},
+      {code: 26, color: '#b03a2e'},
+      {code: 27, color: '#b03a2e'},
+      {code: 34, color: '#b03a2e'},
+      {code: 40, color: '#c9962e'}
+    ],
+    onHover: function(data){
+      if (LINKS[data.code]) { status.textContent = data.name + ' - guide available. Tap to open it.'; }
+      else if (data.code === 40) { status.textContent = 'Fukuoka - the one-day guide publishes on 7 January 2027.'; }
+      else { status.textContent = data.name + ' - no guide yet.'; }
+    },
+    onHoverOut: function(){ status.textContent = DEFAULT_TEXT; },
+    onSelect: function(data){
+      if (LINKS[data.code]) { window.location.href = LINKS[data.code]; }
+      else if (data.code === 40) { status.textContent = 'Fukuoka - the one-day guide publishes on 7 January 2027. Until then, Osaka is the newest guide.'; }
+      else { status.textContent = data.name + ' has no guide yet - a new city is added every month.'; }
+    }
+  });
 })();
 </script>
 </body>
