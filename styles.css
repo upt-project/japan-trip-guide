@@ -9,9 +9,16 @@ header.site{background:var(--navy);color:#fff;padding:14px 20px}
 header.site .wrap{max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px}
 .brand{font-size:20px;font-weight:bold;color:#fff;text-decoration:none;letter-spacing:.2px}
 .brand span{color:var(--gold)}
-nav.main{margin-left:auto;display:flex;flex-wrap:wrap;gap:4px 16px;font-family:Verdana,Geneva,sans-serif;font-size:13px}
+.nav-toggle{position:absolute;opacity:0;pointer-events:none}
+.nav-btn{margin-left:auto;display:flex;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:10px 6px}
+.nav-btn span{display:block;width:26px;height:3px;background:#fff;border-radius:2px}
+nav.main{display:none;flex-basis:100%;flex-wrap:wrap;gap:14px 44px;font-family:Verdana,Geneva,sans-serif;font-size:14px;border-top:1px solid rgba(255,255,255,.25);padding:12px 0 4px;margin-top:4px}
+.nav-toggle:checked~nav.main{display:flex}
+.nav-group{display:flex;flex-direction:column;gap:7px;min-width:170px}
+.nav-head{margin:0 0 3px;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold)}
 nav.main a{color:#dfe6ee;text-decoration:none}
 nav.main a:hover{color:#fff;text-decoration:underline}
+.nav-sub{flex-basis:100%;border-top:1px solid rgba(255,255,255,.25);padding-top:10px}
 .wrap{max-width:960px;margin:0 auto;padding:0 20px}
 .hero{padding:44px 0 8px;text-align:left}
 .hero h1{font-size:34px;line-height:1.25;margin:0 0 12px;color:var(--navy)}
