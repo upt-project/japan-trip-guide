@@ -54,3 +54,14 @@ ul.tight li{margin:4px 0}
 .hero-photo p.lede{color:#e8edf3}
 .hero-photo .btn.secondary{background:transparent;color:#fff;border-color:#fff}
 .card-photo{width:100%;height:170px;object-fit:cover;border-radius:6px;display:block;margin-bottom:12px}
+.fx{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:26px 0 4px}
+.fx-title{border:none;margin:0 0 4px;padding:0;font-size:20px}
+.fx-rate{font-size:17px;color:var(--navy);margin:0 0 12px}
+.fx-rate b{color:var(--vermillion)}
+.fx-note{font-size:13px;color:var(--muted)}
+.fx-row{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.fx-field{display:flex;flex-direction:column;gap:5px;font-family:Verdana,Geneva,sans-serif;font-size:12px;color:var(--muted);flex:1;min-width:150px}
+.fx-field input{font-size:19px;padding:9px 12px;border:1px solid var(--line);border-radius:6px;color:var(--ink);width:100%;background:#fff}
+.fx-arrow{font-size:20px;color:var(--gold);padding-bottom:8px}
+.fx-quick{margin:12px 0 0;font-size:15px;color:var(--navy)}
+.fx .small{margin:8px 0 0}

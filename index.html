@@ -47,6 +47,22 @@
 <a class="btn secondary" href="https://japantripguideforbeginners.substack.com">Subscribe on Substack</a>
 </section>
 
+<section class="fx" aria-label="US dollar to Japanese yen converter">
+<h2 class="fx-title">Dollars to yen, at today's rate</h2>
+<p class="fx-rate" id="fx-rate">US$1 = <b>&yen;159</b> <span class="fx-note">(approximate - loading today's rate)</span></p>
+<div class="fx-row">
+<label class="fx-field">US dollars (USD)
+<input id="fx-usd" type="number" inputmode="decimal" min="0" step="any" value="100">
+</label>
+<span class="fx-arrow">&#8646;</span>
+<label class="fx-field">Japanese yen (JPY)
+<input id="fx-jpy" type="number" inputmode="decimal" min="0" step="any">
+</label>
+</div>
+<p class="fx-quick" id="fx-quick"></p>
+<p class="small">Mid-market rate, fetched when you open this page and updated daily. Your card or ATM will use its own rate - the fees that actually matter are in <a href="cash-and-atms.html">Cash and ATMs in Japan</a>.</p>
+</section>
+
 <h2>The one-day guides</h2>
 <div class="cards">
 <div class="card">
@@ -155,5 +171,58 @@
 <footer class="site"><div class="wrap">
 Japan Trip Guide For Beginners - one-day city guides to Japan. Full guides live on <a href="https://japantripguideforbeginners.substack.com">Substack</a>. Prices and hours change; always check the official links in each guide before you travel.<br>Photos on this page: Niccol&ograve; Chiamori, Hoi Wai, arnaud audoin, Imani Williams, MacroLingo LLC, Kelvin Castelino, Gije Cho and Harry Shum, via Pexels.
 </div></footer>
+<script>
+(function(){
+  var FALLBACK_RATE = 159;
+  var rate = FALLBACK_RATE;
+  var usdEl = document.getElementById('fx-usd');
+  var jpyEl = document.getElementById('fx-jpy');
+  var rateEl = document.getElementById('fx-rate');
+  var quickEl = document.getElementById('fx-quick');
+  function yen(n){ return Math.round(n).toLocaleString('en-US'); }
+  function renderRate(note){
+    rateEl.innerHTML = 'US$1 = <b>&yen;' + rate.toFixed(2) + '</b> <span class="fx-note">(' + note + ')</span>';
+    quickEl.innerHTML = 'So &yen;1,000 &asymp; $' + (1000/rate).toFixed(2) + ' &middot; &yen;5,000 &asymp; $' + (5000/rate).toFixed(2) + ' &middot; &yen;10,000 &asymp; $' + (10000/rate).toFixed(2);
+  }
+  function fromUsd(){
+    var u = parseFloat(usdEl.value);
+    jpyEl.value = isNaN(u) ? '' : Math.round(u * rate);
+  }
+  function fromJpy(){
+    var j = parseFloat(jpyEl.value);
+    usdEl.value = isNaN(j) ? '' : (j / rate).toFixed(2);
+  }
+  usdEl.addEventListener('input', fromUsd);
+  jpyEl.addEventListener('input', fromJpy);
+  renderRate('approximate - loading today\'s rate');
+  fromUsd();
+  function applyRate(r, when){
+    rate = r;
+    renderRate('today\'s rate, updated ' + when);
+    fromUsd();
+  }
+  fetch('https://open.er-api.com/v6/latest/USD')
+    .then(function(res){ return res.json(); })
+    .then(function(d){
+      if (d && d.rates && d.rates.JPY) {
+        var when = 'today';
+        if (d.time_last_update_utc) {
+          var dt = new Date(d.time_last_update_utc);
+          if (!isNaN(dt)) { when = dt.toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'}); }
+        }
+        applyRate(d.rates.JPY, when);
+      } else { throw new Error('no rate'); }
+    })
+    .catch(function(){
+      fetch('https://api.frankfurter.dev/v1/latest?from=USD&to=JPY')
+        .then(function(res){ return res.json(); })
+        .then(function(d){
+          if (d && d.rates && d.rates.JPY) { applyRate(d.rates.JPY, d.date || 'today'); }
+          else { renderRate('approximate rate - live rate unavailable'); }
+        })
+        .catch(function(){ renderRate('approximate rate - live rate unavailable'); });
+    });
+})();
+</script>
 </body>
 </html>
